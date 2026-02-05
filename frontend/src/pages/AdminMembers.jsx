@@ -147,12 +147,32 @@ const AdminMembers = () => {
                                             {new Date(user.created_at).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <Link
-                                                to={`/profile/${user.id}`}
-                                                className="text-blue-500 hover:text-blue-700 font-bold text-sm"
-                                            >
-                                                상세보기
-                                            </Link>
+                                            <div className="flex items-center justify-end gap-2">
+                                                <Link
+                                                    to={`/profile/${user.id}`}
+                                                    className="text-blue-500 hover:text-blue-700 font-bold text-sm"
+                                                >
+                                                    상세보기
+                                                </Link>
+                                                <button
+                                                    onClick={async () => {
+                                                        if (window.confirm('정말 이 사용자를 삭제하시겠습니까? (복구 불가)')) {
+                                                            try {
+                                                                const isAdmin = localStorage.getItem('admin_mode') === 'true';
+                                                                const adminPass = isAdmin ? 'admin1234' : '';
+                                                                await userApi.delete(user.id, adminPass);
+                                                                alert('삭제되었습니다.');
+                                                                loadUsers(); // Refresh list
+                                                            } catch (e) {
+                                                                alert('삭제 실패: ' + (e.response?.data?.detail || e.message));
+                                                            }
+                                                        }
+                                                    }}
+                                                    className="text-red-500 hover:text-red-700 font-bold text-sm"
+                                                >
+                                                    삭제
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

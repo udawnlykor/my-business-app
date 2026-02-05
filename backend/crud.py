@@ -21,6 +21,14 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
+def delete_user(db: Session, user_id: int):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if user:
+        db.delete(user)
+        db.commit()
+        return True
+    return False
+
 # Submission Operations
 def get_submissions(db: Session, skip: int = 0, limit: int = 100, type: str = None):
     query = db.query(models.Submission).order_by(desc(models.Submission.created_at))

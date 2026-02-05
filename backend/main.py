@@ -75,7 +75,21 @@ def update_user(user_id: int, gender: str = Form(...), db: Session = Depends(get
     db_user.gender = gender
     db.commit()
     db.refresh(db_user)
+    db.commit()
+    db.refresh(db_user)
     return db_user
+
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int, x_admin_pass: Optional[str] = Header(None), db: Session = Depends(get_db)):
+    # Auth Check
+    if x_admin_pass != "admin1234":
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    success = crud.delete_user(db, user_id=user_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return {"status": "success"}
 
 @app.post("/submissions", response_model=schemas.Submission)
 async def create_submission(
@@ -106,7 +120,7 @@ async def create_submission(
             
             detail_msg = f"이미 제출하셨습니다. ({date_formatted})"
             if type == "account_book":
-                 detail_msg = f"이미 제출하셨습니다. 금액이 바뀐 경우 마이페이지에서 수정해주세요. ({date_formatted})"
+                detail_msg = f"이미 제출하셨습니다. 금액이 바뀐 경우 마이페이지에서 수정해주세요. ({date_formatted})"
 
             raise HTTPException(
                 status_code=400, 

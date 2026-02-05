@@ -55,6 +55,13 @@ export const userApi = {
             },
         });
     },
+    delete: (id, adminPass = '') => {
+        const headers = {};
+        if (adminPass) {
+            headers['x-admin-pass'] = adminPass;
+        }
+        return api.delete(`/users/${id}`, { headers });
+    },
 };
 
 export default api;
