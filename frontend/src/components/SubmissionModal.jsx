@@ -194,12 +194,11 @@ const SubmissionModal = ({ type, userId, onClose, onSuccess, editData = null }) 
                                 링크 {type === 'journal' ? '(Notion, 블로그 등)' : '(YouTube, 릴스 등)'}
                             </label>
                             <input
-                                type="url"
-                                placeholder="https://..."
+                                type="text"
+                                placeholder="https://... (선택 사항)"
                                 value={formData.link}
                                 onChange={(e) => setFormData({ ...formData, link: e.target.value })}
                                 className="w-full p-4 rounded-2xl border-2 border-slate-100 focus:border-blue-500 outline-none transition-all font-medium bg-slate-50 focus:bg-white"
-                                required
                             />
                         </div>
                     )}

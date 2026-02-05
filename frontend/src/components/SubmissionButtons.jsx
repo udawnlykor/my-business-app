@@ -21,11 +21,11 @@ const SubmissionButtons = ({ onOpenModal }) => {
         },
         {
             type: 'content',
-            label: '콘텐츠 공유',
+            label: '콘텐츠 발행',
             icon: RiMovieLine,
             gradient: 'from-purple-500 to-pink-500',
             iconBg: 'bg-purple-500',
-            description: '유익한 콘텐츠를 공유하세요'
+            description: '내가 발행한 콘텐츠를 공유하세요'
         },
     ];
 
