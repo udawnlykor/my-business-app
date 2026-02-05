@@ -17,11 +17,13 @@ app = FastAPI()
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://truelove-frontend.vercel.app", # Example Vercel URL
+    "*" # Allow all for simplicity during initial deployment
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"], # Allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

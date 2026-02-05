@@ -3,21 +3,16 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-# 1. 환경 변수에서 DB 주소를 찾습니다.
-# (Render 서버에선 설정된 값을 쓰고, 없으면 내 컴퓨터의 파일 DB를 씁니다)
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./bootcamp.db")
+# 1. Supabase 주소를 직접 변수에 할당합니다.
+# 알려주신 비밀번호와 주소를 합친 최종 결과물입니다.
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres.ivjxrylcilewspoxehay:piBGl8GqvXAOdmZk@aws-1-ap-northeast-2.pooler.supabase.com:6543/postgres"
 
-# 2. Render가 주는 주소는 'postgres://' 로 시작하는데,
-# 파이썬은 'postgresql://' 이라고 해야 알아듣습니다. 그래서 이름을 살짝 고쳐줍니다.
-if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
-    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
+# 2. 엔진 생성 (연결 안정성을 위해 pool_pre_ping 추가)
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    pool_pre_ping=True
+)
 
-# 3. SQLite(내 컴퓨터)일 때만 필요한 설정
-connect_args = {"check_same_thread": False} if SQLALCHEMY_DATABASE_URL.startswith("sqlite") else {}
-
-# 엔진 생성
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args=connect_args)
-
+# 3. 세션 및 베이스 설정
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 Base = declarative_base()
