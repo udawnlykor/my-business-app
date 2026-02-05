@@ -103,10 +103,14 @@ async def create_submission(
             print(f"DEBUG: Existing submission date: {existing.date}")
             # Format date as YYYY-MM-DD for Korean message
             date_formatted = submission_date.strftime("%Y-%m-%d")
-            type_korean = "가계부" if type == "account_book" else "저널링"
+            
+            detail_msg = f"이미 제출하셨습니다. ({date_formatted})"
+            if type == "account_book":
+                 detail_msg = f"이미 제출하셨습니다. 금액이 바뀐 경우 마이페이지에서 수정해주세요. ({date_formatted})"
+
             raise HTTPException(
                 status_code=400, 
-                detail=f"이미 제출하셨습니다. 금액이 바뀐 경우 마이페이지에서 수정해주세요. ({date_formatted})"
+                detail=detail_msg
             )
 
     # Handle File Upload
